@@ -14,6 +14,46 @@ const config = {
     measurementId: "G-B3MVRZRTNP"
 }
 
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+    //check if getting back a valid object (sign-in not sign-out)
+    if(!userAuth) {
+        return
+    }
+    // console.log(firestore.doc('users/BxmQPfiIWyddjoaR46HMQ0Aodyd2'))
+
+    console.log("userAuth: ", userAuth)
+
+    //query inside firestore for the document to see if it already exists
+    const userRef = firestore.doc(`users/${userAuth.uid}`)
+    // console.log("userRef: ", userRef)
+
+    //get the snapshot
+    const snapShot = await userRef.get()
+    // console.log("snapShot: ", snapShot)
+
+    if(!snapShot.exists) {
+        //if doesnt exist, we want to create a piece of data there using userRef
+        const {displayName, email} = userAuth
+        const createdAt = new Date() //when invoked
+
+        try {
+            await userRef.set({
+                displayName,
+                email,
+                createdAt,
+                ...additionalData,
+            })
+        }
+        catch(err) {
+            console.log('error creating user: ', err.message)
+        }
+    }
+
+    //return the userRef because there is a chance it might be needed
+    return userRef
+
+}
+
 firebase.initializeApp(config)
 
 //export this out anywhere that will need authentication
