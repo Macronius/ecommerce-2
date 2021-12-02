@@ -45,7 +45,7 @@ class App extends React.Component {
               ...snapShot.data()
             }
           })
-          console.log("this.state: ", this.state)
+          // console.log("console.log() this.state when state changes: ", this.state)
         })
       }
       //NOTE: this sets state's currentUser value to NULL (if the user ever logs out)
