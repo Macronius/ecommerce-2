@@ -1,6 +1,8 @@
 import React from 'react'
 import {Route, Switch} from 'react-router-dom'
 
+import {connect} from 'react-redux'
+
 import HomePage from './pages/homepage/homepage.component.jsx'
 import ShopPage from './pages/shop/shop.component.jsx'
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component.jsx'
@@ -10,46 +12,34 @@ import './App.css';
 
 import {auth, createUserProfileDocument} from './firebase/firebase.utils'
 
-
+//ACTIONS
+import {setCurrentUser} from './redux/user/user.actions'
 
 
 
 class App extends React.Component {
 
-  constructor() {
-    super()
-
-    //store the state of the user in the app.js's state
-    this.state = {
-      currentUser: null,
-    }
-  }
-
   //NOTE: lines 30-42 - this is pretty much how we handle our application being aware of any off-changes on Firebase
   unsubscribeFromAuth = null
 
   componentDidMount() {
+
+    const {setCurrentUser} = this.props
+
     this.unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth=> {
       if(userAuth){
         const userRef = await createUserProfileDocument(userAuth)
-        //NOTE: we want this because we want to check if our database has updated at that reference with any new data
-
-        //PRO: what this method will do is that the moment it instantiates, meaning that the moment our code runs it, it will still send us a snapshot object representing the data that is currently stored in our database
-        //aka: subscribe (listen) to this userRef for any changes to that data
+        
         userRef.onSnapshot( snapShot=> {
-          // console.log("snapShot: ", snapShot) //NOTE: this has the id
-          // console.log("snapShot.data(): ", snapShot.data()) //this has everything else we need
-          this.setState({
-            currentUser: {
+          setCurrentUser(
+            {
               id: snapShot.id,
               ...snapShot.data()
             }
-          })
-          // console.log("console.log() this.state when state changes: ", this.state)
+          )
         })
       }
-      //NOTE: this sets state's currentUser value to NULL (if the user ever logs out)
-      this.setState({currentUser: userAuth})
+      setCurrentUser(userAuth)
     })
   }
 
@@ -61,7 +51,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
         <Switch>
           <Route exact component={HomePage} path="/" />
           <Route exact component={ShopPage} path="/shop" />
@@ -72,7 +62,19 @@ class App extends React.Component {
   }
 }
 
-export default App;
+
+const mapDispatchToProps = (dispatch)=> (
+  {
+    setCurrentUser: (user)=> dispatch(setCurrentUser(user))
+  }
+)
+
+export default connect(null, mapDispatchToProps)(App);
+
+
+
+
+
 
 
 /*
