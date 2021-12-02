@@ -1,22 +1,26 @@
-import React from 'react'
-import './form-input.styles.scss'
+// import React from 'react'
+// import './form-input.styles.scss'
 
-const FormInput = ({changeHandler, label, ...otherProps})=> {
-    return(
-        <div className="group">
-            <input className="form-input" onChange={changeHandler} {...otherProps}  />
-            {
-                label ? 
-                <label className={`${otherProps.value.length ? 'shrink' : ''} form-input-label`}>
-                    {label}
-                </label>
-                : null
-            }
-        </div>
-    )
-}
+// const FormInput = ({changeHandler, label, ...otherProps})=> (
+//     <div className="group">
+//         <input 
+//             className="form-input" 
+//             onChange={changeHandler} 
+//             {...otherProps}  
+//         />
+//         {label ? (
+//             <label 
+//                 className={`${
+//                     otherProps.value.length ? 'shrink' : ''
+//                 } form-input-label`}
+//             >
+//                 {label}
+//             </label>
+//         ) : null}
+//     </div>
+// )
 
-export default FormInput
+// export default FormInput
 
 
 /*
@@ -29,3 +33,25 @@ null is a great way for nothing to occur
 NOTE:
 label will always have 'form-input-label' class, but if the user has ever typed anything in, then it will also have the 'shrink' class as well (for the purpose of those browser that offer an 'auto-complete' feature)
 */
+
+
+import React from 'react';
+
+import './form-input.styles.scss';
+
+const FormInput = ({ handleChange, label, ...otherProps }) => (
+  <div className='group'>
+    <input className='form-input' onChange={handleChange} {...otherProps} />
+    {label ? (
+      <label
+        className={`${
+          otherProps.value.length ? 'shrink' : ''
+        } form-input-label`}
+      >
+        {label}
+      </label>
+    ) : null}
+  </div>
+);
+
+export default FormInput;

@@ -1,8 +1,6 @@
 import firebase from 'firebase/compat/app'
-
 import 'firebase/compat/firestore'
 import 'firebase/compat/auth'
-
 
 const config = {
     apiKey: "AIzaSyBTcI_VSUFO_YPDROp7X-95pTxdLW-qoyg",
@@ -14,14 +12,14 @@ const config = {
     measurementId: "G-B3MVRZRTNP"
 }
 
+firebase.initializeApp(config);
+
 export const createUserProfileDocument = async (userAuth, additionalData) => {
     //check if getting back a valid object (sign-in not sign-out)
     if(!userAuth) {
         return
     }
-    // console.log(firestore.doc('users/BxmQPfiIWyddjoaR46HMQ0Aodyd2'))
-
-    console.log("userAuth: ", userAuth)
+    // console.log("userAuth: ", userAuth)
 
     //query inside firestore for the document to see if it already exists
     const userRef = firestore.doc(`users/${userAuth.uid}`)
@@ -35,7 +33,6 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         //if doesnt exist, we want to create a piece of data there using userRef
         const {displayName, email} = userAuth
         const createdAt = new Date() //when invoked
-
         try {
             await userRef.set({
                 displayName,
@@ -43,8 +40,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
                 createdAt,
                 ...additionalData,
             })
-        }
-        catch(err) {
+        }catch(err) {
             console.log('error creating user: ', err.message)
         }
     }
@@ -54,11 +50,10 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 
 }
 
-firebase.initializeApp(config)
+// firebase.initializeApp(config)
 
 //export this out anywhere that will need authentication
 export const auth = firebase.auth() 
-
 export const firestore = firebase.firestore()
 
 //GOOGLE AUTHENTICATION UTILITY: gives access to this new GoogleAuthProvider() class from the authentication library

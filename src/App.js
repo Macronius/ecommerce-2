@@ -37,22 +37,19 @@ class App extends React.Component {
         //PRO: what this method will do is that the moment it instantiates, meaning that the moment our code runs it, it will still send us a snapshot object representing the data that is currently stored in our database
         //aka: subscribe (listen) to this userRef for any changes to that data
         userRef.onSnapshot( snapShot=> {
-          console.log("snapShot: ", snapShot) //NOTE: this has the id
+          // console.log("snapShot: ", snapShot) //NOTE: this has the id
           // console.log("snapShot.data(): ", snapShot.data()) //this has everything else we need
           this.setState({
             currentUser: {
               id: snapShot.id,
               ...snapShot.data()
             }
-          }, ()=> {
-            console.log("this.state: ", this.state)
           })
+          console.log("this.state: ", this.state)
         })
       }
-      else {
-        //NOTE: this sets state's currentUser value to NULL (if the user ever logs out)
-        this.state({currentUser: userAuth})
-      }
+      //NOTE: this sets state's currentUser value to NULL (if the user ever logs out)
+      this.setState({currentUser: userAuth})
     })
   }
 
