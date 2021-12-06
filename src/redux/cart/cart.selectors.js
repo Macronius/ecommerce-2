@@ -30,8 +30,8 @@ export const selectCartTotal = createSelector(
 
 
 
-            //two types of selectors: 
+// two types of selectors: 
 // inputSelector - doesn't use createSelector
 // outputSelector - does use inputSelector and createSelector to build itself
-//inputSelector - gets the whole state are returns just a slice of it
-//NOTE: gets the whole reducer-state and we just want the cart piece of it
+// inputSelector - gets the whole state are returns just a slice of it
+// NOTE: gets the whole reducer-state and we just want the cart piece of it
