@@ -16,7 +16,6 @@ import './App.css';
 import {auth, createUserProfileDocument} from './firebase/firebase.utils'
 
 import {setCurrentUser} from './redux/user/user.actions'
-
 import {selectCurrentUser} from './redux/user/user.selectors'
 
 
@@ -25,6 +24,7 @@ class App extends React.Component {
   //NOTE: lines 30-42 - this is pretty much how we handle our application being aware of any off-changes on Firebase
   unsubscribeFromAuth = null
 
+  // COMPONENT DID MOUNT
   componentDidMount() {
 
     const {setCurrentUser} = this.props
@@ -42,10 +42,19 @@ class App extends React.Component {
           )
         })
       }
+
       setCurrentUser(userAuth)
+
+      //NOTE: in the collectionsArray, some items we don't want, like id
+      // addCollectionAndDocuments(
+      //   'collections', 
+      //   collectionsArray.map( ({title, items})=> ({title, items}) )
+      // )
+
     })
   }
 
+  // COMPONENT WILL UNMOUNT
   componentWillUnmount() {
     //close the subscription
     this.unsubscribeFromAuth()
@@ -80,9 +89,11 @@ class App extends React.Component {
 
 
 
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser,
-})
+const mapStateToProps = createStructuredSelector(
+  {
+    currentUser: selectCurrentUser
+  }
+)
 
 const mapDispatchToProps = (dispatch)=> (
   {

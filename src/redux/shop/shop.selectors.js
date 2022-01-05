@@ -23,16 +23,13 @@ export const selectShopCollections = createSelector(
 //this selector will convert the object into an array
 export const selectCollectionsForPreview = createSelector(
     [selectShopCollections],
-    (collections)=> Object.keys(collections).map( (key)=> collections[key])
+    (collections)=> collections ? Object.keys(collections).map( (key)=> collections[key]) : []
 )
 
 
 export const selectShopCollection = memoize((collectionUrlParam)=> 
     createSelector(
         [selectShopCollections],
-        (collections)=> collections[collectionUrlParam]
-        // (collections) => collections.find(
-        //     (collection)=> collection.id === COLLECTION_ID_MAP[collectionUrlParam]
-        // )
+        (collections)=> collections ? collections[collectionUrlParam] : null
     )
 )
